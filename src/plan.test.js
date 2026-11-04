@@ -1,0 +1,10 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {categories,makePlan} from './data.js';
+test('all twelve branches have detailed choices',()=>{assert.equal(categories.length,12);assert.ok(categories.every(c=>c.subs.length>=10));});
+test('low energy limits a long session',()=>assert.equal(makePlan({minutes:60,energy:'Very low'}).duration,5));
+test('failed start changes the first action and time',()=>{assert.notEqual(makePlan({}).first,makePlan({small:true}).first);assert.equal(makePlan({small:true}).duration,2);});
+test('living apart is not treated as bereavement',()=>{const p=makePlan({selected:['missing'],details:['Family lives far away']});assert.ok(!/grief/i.test(p.ack));});
+test('basic needs come before studying in combined plans',()=>{const p=makePlan({selected:['needs','school']});assert.match(p.first,/essential support/);assert.match(p.support,/basic-needs/);});
+test('grief gives permission to choose support instead',()=>assert.match(makePlan({details:['A loved one died']}).first,/Schoolwork is optional/));
+test('different approach changes next action',()=>assert.notEqual(makePlan({}).first,makePlan({approach:1}).first));
