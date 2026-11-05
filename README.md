@@ -1,36 +1,45 @@
 # Next Step
 
-A responsive student-support prototype for ages 13+, built from the supplied Student Support App Blueprint. Vite serves a dependency-light JavaScript application; no backend or credentials are required.
+A student-support and study app: practical next steps, a study workspace, and a research library. The public app is hosted at https://dhairyaparyani2010-del.github.io/studyhelp/ .
 
-## Development
+## What is included
 
-Use Node.js 22+ (validated with Node 24).
+- Twelve support categories, 122 distinct situation cards, smaller fallbacks, and support-first routes.
+- A short plan flow with available time, energy, topic, primary concern, adjustable steps, and an optional timer. Only a user's explicit action marks a step complete.
+- Recall cards with editable review dates, eight worked examples with answer checks, an error log, a deadline planner, and an editable weighted-grade calculator.
+- A lazy-loaded index of 1,000 unique PubMed records across 14 topics, with search, filters, pagination, direct source links, and CSV export.
+- Twenty-five checked research/guidance summaries, including an original retrieval study, with claims and scope limits linked to response cards.
+- Draft requests for learning help, more time, access support, practical resources, or a private conversation. Nothing is sent automatically.
+- Responsive phone/tablet/desktop layouts, visible keyboard focus, a skip link, larger-text control, modal keyboard navigation, and reduced-motion styles.
+
+## Run locally
+
+Requires Node.js 24 (the deployment workflow uses Node 24).
 
 ```sh
 npm ci
 npm run dev
+npm test
+npm run build
 ```
 
-Run `npm test` for planner rules and `npm run build` for a production build. `npm run preview` serves the built application.
+The Vite base is /studyhelp/. Build output is dist/. The existing GitHub Pages workflow runs tests and builds before deployment. The conflicting legacy Jekyll workflow was removed so there is one deployment path.
 
-## Included
+## Data and privacy
 
-- Twelve searchable, multi-select category branches, optional specifics, direct study access, and editable combined plans.
-- Time and energy constraints, smaller alternatives, feedback adaptation, a pauseable timer, and human-support navigation.
-- Retrieval workspace, self-checked corrections and review date, an algebra worked example with checked feedback, and error review.
-- Editable help-request drafts with deliberate clipboard copying, source drawer, school/college support options, larger text, and responsive layouts.
-- Guest use with in-memory state only. No analytics, local storage, automatic messages, notifications, or external AI calls.
+Session choices and unfinished work stay in page memory until refresh or tab close. Optional device saving stores Study studio work in this browser's localStorage; it does not persist personal support selections, explanations, or support drafts. Privacy controls clear saved study work or reset the current session. Downloads and clipboard contents are controlled by the user and are not erased by resetting the app.
 
-Refreshing clears session inputs. Copying places text on the device clipboard; external links have their own privacy policies. Study workspace notes are temporary and are cleared when navigating away from that workspace.
+There are no accounts, analytics, ads, notifications, third-party fonts, or automatic messages. External research/support links have their own privacy policies.
 
-## Boundaries before release
+## Research scope
 
-This is a functional prototype, not a clinically reviewed service. Sensitive routes provide general human-support navigation; no reviewed clinical intervention cards are claimed. Evidence metadata comes from the supplied blueprint and has not been independently reverified. Qualified educator and safeguarding review, local resource verification, student usability testing, and real browser/screen-reader accessibility evaluation are required before a public student release.
+The 1,000-paper count means bibliographic records retrieved, deduplicated, automatically screened, and spot-checked. It does not mean all papers were fully read or critically appraised, and it does not demonstrate app effectiveness. Publication types and citation counts are metadata, not evidence-quality ratings. Read [RESEARCH_METHODS.md](RESEARCH_METHODS.md) for inclusion criteria, queries, allocation, exclusions, sample checks, and limits.
 
-No live tutor, automated marking beyond the included algebra exercise, durable spaced-review reminders, school integrations, uploads, or backend report collection are implemented. Recall and error review are manual tools. The reporting panel explicitly explains that it cannot submit reports.
+The 25 checked source summaries support specific underlying principles. Exact response cards, examples, timings, and schedules are app-authored and untested as a combined intervention. The tool does not diagnose or provide treatment. Sensitive support routes require qualified professional review. The app is not monitored and cannot contact help on a user's behalf.
 
-## GitHub preview
+To reproduce the catalog, run python3 scripts/collect-research.py. The source database changes, so regenerated citation counts and selected records may differ.
 
-In the GitHub repository, open **Settings → Pages → Build and deployment → Source** and select **GitHub Actions**. The included workflow deploys on pushes to `main`. If needed, open **Actions → Deploy app to GitHub Pages → Run workflow**. When deployment succeeds, the preview is at https://dhairyaparyani2010-del.github.io/studyhelp/ .
+## Verification
 
-GitHub Pages availability depends on repository visibility and the account plan. This publishes a prototype with its review limitations visibly labeled.
+Automated tests cover situation coverage and distinctness, source mapping, support routing, plan selection, energy limits, weighted grades, review dates, catalog count/deduplication/provenance, and catalog-summary-methods consistency. Browser checks cover the plan journey, retained fields when switching tools, review-card creation, research search and pagination, examples, and layouts at desktop plus 390px/768px iframe viewports.
+

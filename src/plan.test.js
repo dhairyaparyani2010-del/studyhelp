@@ -1,10 +1,10 @@
-import {test} from 'node:test';
+import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import {categories,makePlan} from './data.js';
-test('all twelve branches have detailed choices',()=>{assert.equal(categories.length,12);assert.ok(categories.every(c=>c.subs.length>=10));});
-test('low energy limits a long session',()=>assert.equal(makePlan({minutes:60,energy:'Very low'}).duration,5));
-test('failed start changes the first action and time',()=>{assert.notEqual(makePlan({}).first,makePlan({small:true}).first);assert.equal(makePlan({small:true}).duration,2);});
-test('living apart is not treated as bereavement',()=>{const p=makePlan({selected:['missing'],details:['Family lives far away']});assert.ok(!/grief/i.test(p.ack));});
-test('basic needs come before studying in combined plans',()=>{const p=makePlan({selected:['needs','school']});assert.match(p.first,/essential support/);assert.match(p.support,/basic-needs/);});
-test('grief gives permission to choose support instead',()=>assert.match(makePlan({details:['A loved one died']}).first,/Schoolwork is optional/));
-test('different approach changes next action',()=>assert.notEqual(makePlan({}).first,makePlan({approach:1}).first));
+import { buildPlan, calculateGrade, reviewDate } from './planner.js';
+test('distinct academic barriers produce distinct actions',()=>assert.notEqual(buildPlan({details:['Forget what I study']}).first,buildPlan({details:['Don’t understand a topic']}).first));
+test('selected primary situation controls a combined plan',()=>assert.equal(buildPlan({details:['Perfectionism','Phone checking'],primary:'Phone checking'}).detail,'Phone checking'));
+test('food access takes priority over academic work',()=>{const p=buildPlan({details:['Forget what I study','Not enough food'],primary:'Forget what I study'});assert.equal(p.detail,'Not enough food');assert.notEqual(p.kind,'study');});
+test('low energy and smaller fallback bound duration',()=>{assert.equal(buildPlan({minutes:60,energy:'Very low'}).duration,5);assert.equal(buildPlan({minutes:60,small:true}).duration,2);assert.ok(buildPlan({minutes:-10}).duration>0);});
+test('weighted grades reject invalid weights and calculate correctly',()=>{assert.equal(calculateGrade([{score:80,weight:70},{score:90,weight:20},{score:100,weight:10}]),84);assert.equal(calculateGrade([{score:90,weight:50}]),null);assert.equal(calculateGrade([{score:-1,weight:100}]),null);});
+test('review scheduling handles month transitions',()=>assert.equal(reviewDate('again',new Date(2026,0,31,12)),'2026-02-01'));
+

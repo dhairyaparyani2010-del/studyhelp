@@ -12,20 +12,4 @@ export const categories = [
 ['needs','Money & practical needs','Support for the essentials.','◇',"Not enough food|Unstable housing|No reliable internet|No device|Lack of supplies|Transport problems|Fees|Need a quiet study space|Not sure where to get help|Family financial pressure"],
 ['future','Future & expectations','You can take this one step at a time.','✧',"Unsure about career|College pressure|Fear of disappointing others|Family expectations|Balancing interests|Uncertainty about life changes|Immigration-related worry|School transition|Choosing goals|Loss of purpose"]
 ].map(([id,title,description,icon,subs])=>({id,title,description,icon,subs:subs.split('|')}));
-export const sources = [
-{title:'Improving Students’ Learning With Effective Learning Techniques',org:'Dunlosky et al. · 2013',url:'https://www.psychologicalscience.org/journals/pspi/1529100612453266/',type:'Research review',claim:'Practice testing and distributed practice support learning across the tasks reviewed.',limit:'Does not validate this app, its timing, or guarantee grades.'},
-{title:'Break the Cycle of Procrastination',org:'Cornell Learning Strategies Center',url:'https://lsc.cornell.edu/break-the-cycle-of-procrastination/',type:'Institutional guidance',claim:'Breaking down work and trying a brief start can make a task more manageable.',limit:'Coaching guidance; a timer does not resolve every barrier.'},
-{title:'Organizing Instruction and Study to Improve Student Learning',org:'Institute of Education Sciences · 2007',url:'https://ies.ed.gov/ncee/wwc/PracticeGuide/1',type:'Institutional guidance',claim:'Alternate worked examples with problem-solving practice.',limit:'Recommendations have different evidence ratings; subject content needs checking.'}
-];
-export function makePlan({selected=[],details=[],minutes=15,energy='Some',topic='',priority='Make a plan',small=false,approach=0}) {
- const has=id=>selected.includes(id); const text=details.join(' '); const duration=small?2:Math.min(Number(minutes)||15,energy==='Very low'?5:60);
- const basic=has('needs') || /accessing food/.test(text); const grief=details.includes('A loved one died'); const unknown=/whereabouts/.test(text);
- const support=basic?'A school basic-needs service or student support office':has('access')?'Your school accessibility team':has('health')?'A school nurse or healthcare professional':has('home')||has('feelings')||grief?'A counselor or a safe trusted adult':has('future')?'A school or college advisor':'A teacher, tutor, or trusted adult';
- let first=small?'Open your material and find just one question. You can stop there.':approach%2?'Write one question you could ask someone about this task.':'Choose one small task and open only the material you need.';
- if(basic)first='Choose a safe person at school or a student support office and ask about the essential support you need.';
- else if(unknown)first='Tell a safe trusted adult that you are concerned about someone’s unknown whereabouts. If there is immediate danger, contact local emergency services.';
- else if(grief)first='Choose what feels helpful: talk to someone, ask for school flexibility, or try a small familiar task. Schoolwork is optional.';
- else if(priority==='Find a person to help'||priority==='Feel supported')first='Choose one safe person you would feel comfortable asking for support.';
- else if(has('access')) first='Choose an accessible format or ask your teacher for material you can use.';
- return {duration,support,first,ack:grief?'There is room for grief. You can ask for support and flexibility.':has('missing')?'Missing someone can make today feel harder. You can choose connection as your next step.':selected.length>1?'A few things are asking for your energy. Let’s choose one manageable way forward.':'You don’t have to solve everything today. One small step is enough.',study:`${duration} minutes${topic?' on '+topic:''}: ${approach%2?'write what is unclear, then work through one familiar example.':'recall one idea without your notes, check it, and correct one gap.'}`,steps:['Choose one clear finish point.',has('focus')?'Silence nonessential notifications; keep any device you need for learning.':'Try one question or a rough first sentence.',has('health')?'Choose a stopping time that protects meals, rest, and sleep.':'Leave yourself a note about what to try next.']};
-}
+
